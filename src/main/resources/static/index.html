@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>WebSocket Example: Python Server</title>
+</head>
+<body>
+    <h1>Messages</h1>
+    <div>
+        <ul id="messages">
+        </ul>
+    </div>
+    <div>
+        <input type="text" id="messageBox" />
+        <input type="button" value="Send" onclick="sendMessage()" />
+    </div>
+
+    <script type="text/javascript">
+
+        var localSocket = new WebSocket("ws://localhost:9998/echo");
+
+        window.localSocket = localSocket;
+
+        localSocket.onopen = function() {
+          console.log('Web Socket opened correctly');
+        };
+
+        localSocket.onmessage = function(evt){
+            console.log(evt);
+            var dataElement = document.getElementById('messages');
+            var liElement = document.createElement('li');
+            liElement.innerText = evt.data;
+            dataElement.appendChild(liElement);
+        };
+
+        localSocket.onclose = function() {
+            console.log('Web socket closed');
+        };
+
+        function sendMessage() {
+            var dataElement = document.getElementById('messageBox');
+            localSocket.send(dataElement.value);
+            dataElement.value = '';
+        }
+    </script>
+</body>
+</html>
